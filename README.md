@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logo.png" alt="Golito Logo" width="120" />
+</p>
+
 # @golitodotfun/sdk
 
 Official TypeScript/JavaScript SDK for interacting with the **Golito** P2P football predictions platform and on-chain minigames on Solana.
