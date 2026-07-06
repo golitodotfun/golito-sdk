@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.png" alt="Golito Logo" width="120" />
+  <img src="stadium_pixel_art.png" alt="Golito SDK Banner" width="600" />
 </p>
 
 # @golitodotfun/sdk
