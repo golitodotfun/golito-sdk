@@ -1,0 +1,33 @@
+{
+  "name": "@golitodotfun/sdk",
+  "version": "1.0.0",
+  "description": "Official TypeScript SDK for Golito P2P football predictions and on-chain minigames on Solana",
+  "main": "dist/index.js",
+  "types": "dist/index.d.type",
+  "module": "dist/index.esm.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "keywords": [
+    "solana",
+    "web3",
+    "football",
+    "prediction",
+    "polymarket",
+    "sdk",
+    "p2p"
+  ],
+  "author": "Golito Team",
+  "license": "MIT",
+  "dependencies": {
+    "@solana/web3.js": "^1.95.3",
+    "@solana/spl-token": "^0.4.8"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
