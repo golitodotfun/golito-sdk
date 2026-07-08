@@ -1,6 +1,6 @@
 # @golitodotfun/sdk
 
-Official TypeScript/JavaScript SDK for interacting with the **Golito** P2P football predictions platform and on-chain minigames on the Robinhood Chain EVM.
+Official TypeScript/JavaScript SDK for interacting with **Golito** — an arcade-style football prediction platform on Robinhood Chain (Rhood) featuring PvP prediction pools, leaderboards, streaks, copy betting, and minigames.
 
 [![License](https://img.shields.io/github/license/golitodotfun/golito-sdk)](LICENSE)
 [![Robinhood Testnet](https://img.shields.io/badge/Robinhood-Testnet-green)](https://explorer.testnet.chain.robinhood.com)

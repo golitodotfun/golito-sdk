@@ -1,7 +1,7 @@
 {
   "name": "@golitodotfun/sdk",
   "version": "1.0.0",
-  "description": "Official TypeScript SDK for Golito P2P football predictions and on-chain minigames on Solana",
+  "description": "Official TypeScript SDK for Golito — an arcade-style football prediction platform on Robinhood Chain (Rhood)",
   "main": "dist/index.js",
   "types": "dist/index.d.type",
   "module": "dist/index.esm.js",
