@@ -1,9 +1,3 @@
-import { Connection, PublicKey, Transaction } from '@solana/web3.js';
-import { 
-  getAssociatedTokenAddress, 
-  createTransferInstruction,
-  createAssociatedTokenAccountInstruction
-} from '@solana/spl-token';
 import { 
   GOLITO_MINT_ADDRESS, 
   GOLITO_ESCROW_WALLET, 
@@ -28,64 +22,40 @@ import {
 
 export class GolitoClient {
   private backendUrl: string;
-  private connection: Connection;
-  private mintPubKey: PublicKey;
-  private escrowPubKey: PublicKey;
+  private rpcUrl: string;
+  private mintAddress: string;
+  private escrowAddress: string;
 
   constructor(config: { backendUrl?: string; rpcUrl?: string } = {}) {
     this.backendUrl = config.backendUrl || DEFAULT_BACKEND_URL;
-    this.connection = new Connection(config.rpcUrl || DEFAULT_RPC_URL, 'confirmed');
-    this.mintPubKey = new PublicKey(GOLITO_MINT_ADDRESS);
-    this.escrowPubKey = new PublicKey(GOLITO_ESCROW_WALLET);
+    this.rpcUrl = config.rpcUrl || DEFAULT_RPC_URL;
+    this.mintAddress = GOLITO_MINT_ADDRESS;
+    this.escrowAddress = GOLITO_ESCROW_WALLET;
   }
 
   // ==========================================
-  // Solana Transaction Builders
+  // EVM Transaction Builders
   // ==========================================
 
   /**
    * Helper to build a transaction sending GOLITO tokens to the Escrow wallet
    */
   async buildGolitoStakingTransaction(
-    playerPubKey: PublicKey,
+    playerAddress: string,
     amountInGolito: number
-  ): Promise<Transaction> {
-    const amountInDecimals = amountInGolito * Math.pow(10, GOLITO_DECIMALS);
+  ): Promise<{ to: string; from: string; data: string; value: string }> {
+    const transferSelector = '0xa9059cbb'; // transfer(address,uint256) selector
+    const paddedRecipient = this.escrowAddress.toLowerCase().slice(2).padStart(64, '0');
+    const rawAmount = BigInt(Math.round(amountInGolito * Math.pow(10, GOLITO_DECIMALS)));
+    const paddedAmount = rawAmount.toString(16).padStart(64, '0');
+    const callData = transferSelector + paddedRecipient + paddedAmount;
 
-    const playerAta = await getAssociatedTokenAddress(this.mintPubKey, playerPubKey);
-    const escrowAta = await getAssociatedTokenAddress(this.mintPubKey, this.escrowPubKey);
-
-    const transaction = new Transaction();
-
-    // Check if Escrow ATA exists. If not, add instruction to create it (highly unlikely on prod, but good practice)
-    const escrowAtaInfo = await this.connection.getAccountInfo(escrowAta);
-    if (!escrowAtaInfo) {
-      transaction.add(
-        createAssociatedTokenAccountInstruction(
-          playerPubKey, // payer
-          escrowAta, // associated token address
-          this.escrowPubKey, // owner
-          this.mintPubKey // mint
-        )
-      );
-    }
-
-    // Add SPL token transfer instruction
-    transaction.add(
-      createTransferInstruction(
-        playerAta,
-        escrowAta,
-        playerPubKey,
-        amountInDecimals
-      )
-    );
-
-    // Fetch recent blockhash
-    const { blockhash } = await this.connection.getLatestBlockhash();
-    transaction.recentBlockhash = blockhash;
-    transaction.feePayer = playerPubKey;
-
-    return transaction;
+    return {
+      to: this.mintAddress,
+      from: playerAddress,
+      data: callData,
+      value: '0x0'
+    };
   }
 
   // ==========================================

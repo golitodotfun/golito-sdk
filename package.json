@@ -24,8 +24,6 @@
   "author": "Golito Team",
   "license": "MIT",
   "dependencies": {
-    "@solana/web3.js": "^1.95.3",
-    "@solana/spl-token": "^0.4.8"
   },
   "devDependencies": {
     "typescript": "^5.3.3"

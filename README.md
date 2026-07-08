@@ -1,9 +1,9 @@
 # @golitodotfun/sdk
 
-Official TypeScript/JavaScript SDK for interacting with the **Golito** P2P football predictions platform and on-chain minigames on Solana.
+Official TypeScript/JavaScript SDK for interacting with the **Golito** P2P football predictions platform and on-chain minigames on the Robinhood Chain EVM.
 
 [![License](https://img.shields.io/github/license/golitodotfun/golito-sdk)](LICENSE)
-[![Solana Devnet](https://img.shields.io/badge/Solana-Devnet-blue)](https://explorer.solana.com/?cluster=devnet)
+[![Robinhood Testnet](https://img.shields.io/badge/Robinhood-Testnet-green)](https://explorer.testnet.chain.robinhood.com)
 [![npm version](https://img.shields.io/badge/npm-1.0.0-cb3837.svg)](package.json)
 
 ---
@@ -15,7 +15,7 @@ Official TypeScript/JavaScript SDK for interacting with the **Golito** P2P footb
 - 🏃‍♂️ **Tiki-Taka Match resolve**: Initialize and resolve active retro arcade runs.
 - 📈 **Daily Leaderboards**: Query leaderboard entries and stats.
 - 👥 **Copy BettingEscrow system**: Manage copy connections, active predictor balances, and deposits.
-- 🪙 **Solana Transaction Builders**: Build compliant GOLITO SPL token transfer transactions directly.
+- 🪙 **EVM Transaction Builders**: Build GOLITO ERC20 token transfer transaction parameters directly for Metamask/Rabby.
 
 ---
 
@@ -24,13 +24,13 @@ Official TypeScript/JavaScript SDK for interacting with the **Golito** P2P footb
 Install the package via npm:
 
 ```bash
-npm install @golitodotfun/sdk @solana/web3.js @solana/spl-token
+npm install @golitodotfun/sdk
 ```
 
 Or via yarn:
 
 ```bash
-yarn add @golitodotfun/sdk @solana/web3.js @solana/spl-token
+yarn add @golitodotfun/sdk
 ```
 
 ---
@@ -42,13 +42,13 @@ yarn add @golitodotfun/sdk @solana/web3.js @solana/spl-token
 ```typescript
 import { GolitoClient } from '@golitodotfun/sdk';
 
-// Initialize with default endpoints (Solana Devnet & Production backend)
+// Initialize with default endpoints (Robinhood Chain Testnet & Production backend)
 const client = new GolitoClient();
 
 // Or with custom URLs
 const customClient = new GolitoClient({
   backendUrl: 'http://localhost:5000',
-  rpcUrl: 'https://api.devnet.solana.com'
+  rpcUrl: 'https://rpc.testnet.chain.robinhood.com/rpc'
 });
 ```
 
@@ -62,25 +62,24 @@ console.log('Active Fixtures:', matches);
 ### Place a Prediction (Transaction + API)
 
 ```typescript
-import { PublicKey, Connection, sendAndConfirmTransaction } from '@solana/web3.js';
-
-const playerPublicKey = new PublicKey('USER_WALLET_PUBKEY');
+const playerAddress = '0x1234...5678';
 const stakeAmount = 1000; // 1,000 GOLITO
 
-// 1. Build the Solana transaction sending tokens to Escrow
-const transaction = await client.buildGolitoStakingTransaction(
-  playerPublicKey,
+// 1. Build the EVM transaction parameters sending tokens to Escrow
+const txParams = await client.buildGolitoStakingTransaction(
+  playerAddress,
   stakeAmount
 );
 
-// 2. Sign and send the transaction using the user's wallet provider
-// (Example assuming wallet adapter is available)
-const signature = await wallet.sendTransaction(transaction, connection);
-await connection.confirmTransaction(signature, 'confirmed');
+// 2. Send the transaction using the window.ethereum provider (e.g. MetaMask / Rabby)
+const signature = await window.ethereum.request({
+  method: 'eth_sendTransaction',
+  params: [txParams]
+});
 
 // 3. Log the prediction to the database
 const result = await client.submitPredictionRecord({
-  wallet_address: playerPublicKey.toBase58(),
+  wallet_address: playerAddress,
   match_id: 'api-12345',
   prediction_type: 'pemenang',
   prediction_value: 'home', // 'home', 'away', or 'draw'
