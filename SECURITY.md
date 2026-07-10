@@ -15,7 +15,7 @@ We take the security of Golito and our users very seriously. If you find a secur
 
 Instead, please report it privately to our security team:
 
-* By email: **golitoofficial@gmail.com**
+* By email: **contact@golito.fun**
 
 Please include as much detail as possible in your report, including:
 - A description of the vulnerability.

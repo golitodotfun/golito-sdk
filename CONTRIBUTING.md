@@ -10,7 +10,7 @@ Thank you for your interest in contributing to the official Golito TypeScript SD
 If you find a bug, please create a GitHub Issue. Be sure to include:
 - A clear description of the problem.
 - Steps to reproduce the issue.
-- Details about your environment (Node.js version, `@solana/web3.js` version, etc.).
+- Details about your environment (Node.js version, `ethers` version, etc.).
 
 ### Suggesting Enhancements
 We welcome feature requests! Open a GitHub Issue explaining:
