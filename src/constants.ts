@@ -3,4 +3,4 @@ export const GOLITO_ESCROW_WALLET = '0x6fb8403e5D113562e85728A7248f488c763E0e1A'
 export const GOLITO_DECIMALS = 18;
 
 export const DEFAULT_BACKEND_URL = 'https://golito-app-production.up.railway.app';
-export const DEFAULT_RPC_URL = 'https://rpc.testnet.chain.robinhood.com/rpc';
+export const DEFAULT_RPC_URL = 'https://mainnet.robinhoodchain.com/rpc';

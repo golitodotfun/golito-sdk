@@ -13,7 +13,8 @@
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "keywords": [
-    "solana",
+    "evm",
+    "robinhood-chain",
     "web3",
     "football",
     "prediction",

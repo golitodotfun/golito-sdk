@@ -3,7 +3,7 @@
 Official TypeScript/JavaScript SDK for interacting with **Golito** — an arcade-style football prediction platform on Robinhood Chain (Rhood) featuring PvP prediction pools, leaderboards, streaks, copy betting, and minigames.
 
 [![License](https://img.shields.io/github/license/golitodotfun/golito-sdk)](LICENSE)
-[![Robinhood Testnet](https://img.shields.io/badge/Robinhood-Testnet-green)](https://explorer.testnet.chain.robinhood.com)
+[![Robinhood Mainnet](https://img.shields.io/badge/Robinhood_Chain-Mainnet-00c853)](https://explorer.chain.robinhood.com)
 [![npm version](https://img.shields.io/badge/npm-1.0.0-cb3837.svg)](package.json)
 
 ---
@@ -14,8 +14,8 @@ Official TypeScript/JavaScript SDK for interacting with **Golito** — an arcade
 - 🎡 **Lucky Spin Minigame**: Query spin status, claim cooldowns, and resolve random spins on-chain.
 - 🏃‍♂️ **Tiki-Taka Match resolve**: Initialize and resolve active retro arcade runs.
 - 📈 **Daily Leaderboards**: Query leaderboard entries and stats.
-- 👥 **Copy BettingEscrow system**: Manage copy connections, active predictor balances, and deposits.
-- 🪙 **EVM Transaction Builders**: Build GOLITO ERC20 token transfer transaction parameters directly for Metamask/Rabby.
+- 👥 **Copy Betting Escrow system**: Manage copy connections, active predictor balances, and deposits.
+- 🪙 **EVM Transaction Builders**: Build GOLITO ERC-20 token transfer transaction parameters directly for MetaMask/Rabby.
 
 ---
 
@@ -42,13 +42,13 @@ yarn add @golitodotfun/sdk
 ```typescript
 import { GolitoClient } from '@golitodotfun/sdk';
 
-// Initialize with default endpoints (Robinhood Chain Testnet & Production backend)
+// Initialize with default endpoints (Robinhood Chain Mainnet & Production backend)
 const client = new GolitoClient();
 
 // Or with custom URLs
 const customClient = new GolitoClient({
   backendUrl: 'http://localhost:5000',
-  rpcUrl: 'https://rpc.testnet.chain.robinhood.com/rpc'
+  rpcUrl: 'https://mainnet.robinhoodchain.com/rpc'
 });
 ```
 
@@ -59,7 +59,7 @@ const matches = await client.getMatches();
 console.log('Active Fixtures:', matches);
 ```
 
-### Place a Prediction (Transaction + API)
+### Place a Prediction (EVM Transaction + API)
 
 ```typescript
 const playerAddress = '0x1234...5678';
@@ -93,7 +93,7 @@ console.log('Prediction placed successfully! ID:', result.predictionId);
 ### Check Lucky Spin & Claim Free Spin
 
 ```typescript
-const wallet = 'USER_WALLET_PUBKEY';
+const wallet = '0xYourWalletAddress';
 
 // Check if free spin is available
 const status = await client.getSpinStatus(wallet);
@@ -115,7 +115,7 @@ if (status.canFreeSpin) {
 ## API Reference
 
 ### Staking & Transactions
-* `buildGolitoStakingTransaction(playerPubKey, amountInGolito)`: Generates a web3 `Transaction` sending GOLITO tokens to the Escrow account.
+* `buildGolitoStakingTransaction(playerAddress, amountInGolito)`: Generates EVM transaction parameters for an ERC-20 `transfer()` call sending GOLITO tokens to the Escrow wallet.
 
 ### Matches & Pools
 * `getMatches()`: Returns array of active match fixtures.
@@ -126,7 +126,7 @@ if (status.canFreeSpin) {
 * `submitPredictionRecord(params)`: Submits prediction tx logs to backend.
 
 ### Faucet & Minigames
-* `claimFaucet(walletAddress)`: Claims 25,000 free testnet GOLITO.
+* `claimFaucet(walletAddress)`: Claims 25,000 free GOLITO tokens.
 * `getSpinStatus(walletAddress)`: Inspects Lucky Spin cooldown.
 * `executeSpin(params)`: Plays Lucky Spin (Free/Paid).
 
@@ -134,6 +134,30 @@ if (status.canFreeSpin) {
 * `startTikiTaka(walletAddress, txSignature)`: Logs start of Tiki-Taka run.
 * `resolveTikiTaka(matchId, finalScore)`: Resolves score and high scores.
 * `getTikiTakaLeaderboard()`: Fetches high-score scoreboard.
+
+### Copy Betting
+* `getCopyConnections(followerWallet)`: Fetch copy betting connections.
+* `toggleCopyConnection(params)`: Create or update copy connection.
+* `getCopyEscrowBalance(walletAddress)`: Fetch copy escrow balance.
+
+### Burn & Leaderboard
+* `getDailyLeaderboard()`: Fetch daily predictions leaderboard.
+* `getBurnStats()`: Fetch deflationary burn statistics and history.
+
+---
+
+## Network Details
+
+| Parameter | Value |
+|-----------|-------|
+| **Chain** | Robinhood Chain (Mainnet) |
+| **Chain ID** | 46630 |
+| **RPC URL** | `https://mainnet.robinhoodchain.com/rpc` |
+| **Explorer** | [explorer.chain.robinhood.com](https://explorer.chain.robinhood.com) |
+| **Token** | $GOLITO (ERC-20) |
+| **Token Address** | `0x07C229Dff6ed1e71AeD10323660C8795D30FE929` |
+| **Escrow Wallet** | `0x6fb8403e5D113562e85728A7248f488c763E0e1A` |
+| **Decimals** | 18 |
 
 ---
 
